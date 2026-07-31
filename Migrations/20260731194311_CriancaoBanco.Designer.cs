@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechChallenge;
 
@@ -11,9 +12,11 @@ using TechChallenge;
 namespace TechChallenge.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260731194311_CriancaoBanco")]
+    partial class CriancaoBanco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,18 +25,38 @@ namespace TechChallenge.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AlunoEquipe", b =>
+            modelBuilder.Entity("TechChallenge.AlunoEquipe", b =>
                 {
-                    b.Property<int>("AlunoId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("EquipeId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AlunoEquipeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DataEntrada")
+                    b.Property<bool>("Ativa")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("AlunoId", "EquipeId");
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("EquipeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlunoEquipeId");
 
                     b.HasIndex("EquipeId");
 
@@ -174,6 +197,9 @@ namespace TechChallenge.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AlunoEquipeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
@@ -203,6 +229,8 @@ namespace TechChallenge.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AlunoEquipeId");
+
                     b.HasIndex("CategoriaId");
 
                     b.HasIndex("EquipeId");
@@ -212,27 +240,23 @@ namespace TechChallenge.Migrations
                     b.ToTable("Projetos");
                 });
 
-            modelBuilder.Entity("AlunoEquipe", b =>
+            modelBuilder.Entity("TechChallenge.AlunoEquipe", b =>
                 {
-                    b.HasOne("TechChallenge.Models.Aluno", "Aluno")
-                        .WithMany()
-                        .HasForeignKey("AlunoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TechChallenge.Models.Equipe", "Equipe")
+                    b.HasOne("TechChallenge.AlunoEquipe", null)
                         .WithMany("AlunosEquipes")
-                        .HasForeignKey("EquipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AlunoEquipeId");
 
-                    b.Navigation("Aluno");
-
-                    b.Navigation("Equipe");
+                    b.HasOne("TechChallenge.Models.Equipe", null)
+                        .WithMany("AlunosEquipes")
+                        .HasForeignKey("EquipeId");
                 });
 
             modelBuilder.Entity("TechChallenge.Projeto", b =>
                 {
+                    b.HasOne("TechChallenge.AlunoEquipe", null)
+                        .WithMany("Projetos")
+                        .HasForeignKey("AlunoEquipeId");
+
                     b.HasOne("TechChallenge.Categoria", "Categoria")
                         .WithMany()
                         .HasForeignKey("CategoriaId")
@@ -256,6 +280,13 @@ namespace TechChallenge.Migrations
                     b.Navigation("Equipe");
 
                     b.Navigation("Professor");
+                });
+
+            modelBuilder.Entity("TechChallenge.AlunoEquipe", b =>
+                {
+                    b.Navigation("AlunosEquipes");
+
+                    b.Navigation("Projetos");
                 });
 
             modelBuilder.Entity("TechChallenge.Models.Equipe", b =>
