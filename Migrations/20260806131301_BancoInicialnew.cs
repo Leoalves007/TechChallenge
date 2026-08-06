@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TechChallenge.Migrations
 {
     /// <inheritdoc />
-    public partial class CriancaoBanco : Migration
+    public partial class BancoInicialnew : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,28 +83,25 @@ namespace TechChallenge.Migrations
                 name: "AlunosEquipes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Ativa = table.Column<bool>(type: "bit", nullable: false),
-                    AlunoEquipeId = table.Column<int>(type: "int", nullable: true),
-                    EquipeId = table.Column<int>(type: "int", nullable: true)
+                    AlunoId = table.Column<int>(type: "int", nullable: false),
+                    EquipeId = table.Column<int>(type: "int", nullable: false),
+                    DataEntrada = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AlunosEquipes", x => x.Id);
+                    table.PrimaryKey("PK_AlunosEquipes", x => new { x.AlunoId, x.EquipeId });
                     table.ForeignKey(
-                        name: "FK_AlunosEquipes_AlunosEquipes_AlunoEquipeId",
-                        column: x => x.AlunoEquipeId,
-                        principalTable: "AlunosEquipes",
-                        principalColumn: "Id");
+                        name: "FK_AlunosEquipes_Alunos_AlunoId",
+                        column: x => x.AlunoId,
+                        principalTable: "Alunos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AlunosEquipes_Equipes_EquipeId",
                         column: x => x.EquipeId,
                         principalTable: "Equipes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,17 +117,11 @@ namespace TechChallenge.Migrations
                     Pontuacao = table.Column<int>(type: "int", nullable: false),
                     ProfessorId = table.Column<int>(type: "int", nullable: false),
                     CategoriaId = table.Column<int>(type: "int", nullable: false),
-                    EquipeId = table.Column<int>(type: "int", nullable: false),
-                    AlunoEquipeId = table.Column<int>(type: "int", nullable: true)
+                    EquipeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projetos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Projetos_AlunosEquipes_AlunoEquipeId",
-                        column: x => x.AlunoEquipeId,
-                        principalTable: "AlunosEquipes",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Projetos_Categorias_CategoriaId",
                         column: x => x.CategoriaId,
@@ -152,19 +143,9 @@ namespace TechChallenge.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AlunosEquipes_AlunoEquipeId",
-                table: "AlunosEquipes",
-                column: "AlunoEquipeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AlunosEquipes_EquipeId",
                 table: "AlunosEquipes",
                 column: "EquipeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Projetos_AlunoEquipeId",
-                table: "Projetos",
-                column: "AlunoEquipeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projetos_CategoriaId",
@@ -186,22 +167,22 @@ namespace TechChallenge.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Alunos");
+                name: "AlunosEquipes");
 
             migrationBuilder.DropTable(
                 name: "Projetos");
 
             migrationBuilder.DropTable(
-                name: "AlunosEquipes");
+                name: "Alunos");
 
             migrationBuilder.DropTable(
                 name: "Categorias");
 
             migrationBuilder.DropTable(
-                name: "Professores");
+                name: "Equipes");
 
             migrationBuilder.DropTable(
-                name: "Equipes");
+                name: "Professores");
         }
     }
 }

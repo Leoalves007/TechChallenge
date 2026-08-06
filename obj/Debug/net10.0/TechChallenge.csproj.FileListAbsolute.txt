@@ -435,3 +435,4 @@ C:/Users/Admin/Documents/I4DS/TechChallenge/TechChallenge/obj/Debug/net10.0/Tech
 /Users/DS2/Documents/TechChallenge/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.Scripting.resources.dll
 /Users/DS2/Documents/TechChallenge/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.Scripting.resources.dll
 /Users/DS2/Documents/TechChallenge/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.Scripting.resources.dll
+/Users/DS2/Documents/TechChallenge/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

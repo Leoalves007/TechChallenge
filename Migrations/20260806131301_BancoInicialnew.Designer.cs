@@ -12,8 +12,8 @@ using TechChallenge;
 namespace TechChallenge.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260731200446_Correcao")]
-    partial class Correcao
+    [Migration("20260806131301_BancoInicialnew")]
+    partial class BancoInicialnew
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
